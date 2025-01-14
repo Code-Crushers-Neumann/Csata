@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/rooms/Deadend_up.gd" type="Script" id=1]
+
+[node name="Deadend_up" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+color = Color( 0.682353, 0.678431, 0.678431, 1 )
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+margin_left = 331.0
+margin_top = 166.0
+margin_right = 1606.0
+margin_bottom = 890.0
+color = Color( 0.160784, 0.054902, 0.054902, 1 )

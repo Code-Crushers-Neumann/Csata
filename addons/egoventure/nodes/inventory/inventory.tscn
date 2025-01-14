@@ -1,0 +1,131 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/egoventure/nodes/inventory/inventory.gd" type="Script" id=2]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Activate"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Canvas/InventoryAnchor:margin_top")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0 ]
+}
+
+[node name="Inventory" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Canvas" type="CanvasLayer" parent="."]
+
+[node name="InventoryAnchor" type="Control" parent="Canvas"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="PanelContainer" parent="Canvas/InventoryAnchor"]
+anchor_right = 1.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InventoryPanel" type="HBoxContainer" parent="Canvas/InventoryAnchor/Panel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 2553.0
+margin_bottom = 135.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Menu" type="TextureButton" parent="Canvas/InventoryAnchor/Panel/InventoryPanel"]
+margin_top = 64.0
+margin_bottom = 64.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+button_mask = 3
+stretch_mode = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Notepad" type="TextureButton" parent="Canvas/InventoryAnchor/Panel/InventoryPanel"]
+margin_left = 4.0
+margin_top = 64.0
+margin_right = 4.0
+margin_bottom = 64.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+button_mask = 3
+stretch_mode = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ArrowLeft" type="TextureButton" parent="Canvas/InventoryAnchor/Panel/InventoryPanel"]
+margin_left = 8.0
+margin_right = 8.0
+margin_bottom = 128.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Canvas/InventoryAnchor/Panel/InventoryPanel"]
+margin_left = 12.0
+margin_right = 2538.0
+margin_bottom = 128.0
+size_flags_horizontal = 3
+scroll_vertical_enabled = false
+
+[node name="Inventory" type="HBoxContainer" parent="Canvas/InventoryAnchor/Panel/InventoryPanel/ScrollContainer"]
+margin_right = 2526.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="ArrowRight" type="TextureButton" parent="Canvas/InventoryAnchor/Panel/InventoryPanel"]
+margin_left = 2542.0
+margin_right = 2542.0
+margin_bottom = 128.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Reveal" type="TextureButton" parent="Canvas/InventoryAnchor/Panel/InventoryPanel"]
+margin_left = 2546.0
+margin_right = 2546.0
+margin_bottom = 128.0
+stretch_mode = 3
+
+[node name="Animations" type="AnimationPlayer" parent="."]
+anims/Activate = SubResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.7
+
+[connection signal="pressed" from="Canvas/InventoryAnchor/Panel/InventoryPanel/Menu" to="." method="_on_Menu_pressed"]
+[connection signal="pressed" from="Canvas/InventoryAnchor/Panel/InventoryPanel/Notepad" to="." method="_on_Notepad_pressed"]
+[connection signal="pressed" from="Canvas/InventoryAnchor/Panel/InventoryPanel/ArrowLeft" to="." method="_on_ArrowLeft_pressed"]
+[connection signal="pressed" from="Canvas/InventoryAnchor/Panel/InventoryPanel/ArrowRight" to="." method="_on_ArrowRight_pressed"]
+[connection signal="gui_input" from="Canvas/InventoryAnchor/Panel/InventoryPanel/Reveal" to="." method="_on_Reveal_gui_input"]

@@ -1,0 +1,650 @@
+# The MDNA main menu
+extends CanvasLayer
+
+
+# Emitted when the user wants to start a new game
+signal new_game
+
+
+# Emitted when the user wants to quit the game
+signal quit_game
+
+
+# Lowest Audio level
+const AUDIO_MIN: float = -60.0
+
+# Minimum number of seconds a speech or background sample should
+# be played
+const MINIMUM_SAMPLE_TIME: float = 2.0
+
+
+# Wether the main menu can be hidden
+var resumeable: bool = true
+
+# Wether the a game can be saved
+var saveable: bool = true
+
+# Wether the menu can be displayed at all
+var disabled: bool = false
+
+
+# Currently selected save slot (used for overwrite confirmation dialog)
+var _selected_slot: int
+
+# Wether we are saving or loading
+var _is_save_mode: bool
+
+# The currently visible save slot page
+var _save_slot_page: int = 1
+
+# The configuration of this game
+var _configuration: GameConfiguration
+
+# A texture for an empty image
+var _empty_image_texture: ImageTexture
+
+# Wether the mouse cursor was hidden before we switched to the menu
+var _mouse_was_hidden: bool = false
+
+
+# Default to hiding the menu
+func _ready():
+	EgoVenture.connect("game_loaded", self, "toggle")
+
+
+# Hide everything upon startup
+func _enter_tree():
+	$Menu.hide()
+	$Menu/MainMenu.show()
+	$Menu/SaveSlots.hide()
+	$Menu/Options.hide()
+
+
+# Handle wether the game is currently saveable
+#
+# ** parameters **
+#
+# - delta: Time in milliseconds since last call to _process
+func _process(_delta):
+	$Menu/MainMenu/Margin/VBox/MenuItems/Save.disabled = not saveable
+
+
+# Configure the menu
+# 
+# ** Parameters **
+#
+# - configuration: The game configuration resource
+func configure(configuration: GameConfiguration):
+	_configuration = configuration
+	
+	# Set the different textures
+	$Menu/MainMenu/Background.texture = configuration.menu_background
+	$Menu/MainMenu/Margin/VBox/Logo.texture = configuration.design_logo
+	$Menu/SaveSlots/Background.texture = configuration.menu_saveslots_background
+	$Menu/SaveSlots/VBox/HBox/Previous.texture_normal = \
+			configuration.menu_saveslots_previous_image
+	$Menu/SaveSlots/VBox/HBox/Next.texture_normal = \
+			configuration.menu_saveslots_next_image
+	$Menu/Options/Background.texture = configuration.menu_options_background
+	
+	$Menu/QuitConfirm.dialog_text = configuration.menu_quit_confirmation
+	$Menu/OverwriteConfirm.dialog_text = \
+			configuration.menu_overwrite_confirmation
+	$Menu/RestartConfirm.dialog_text = configuration.menu_restart_confirmation
+	
+	$Menu.theme = configuration.design_theme
+	
+	$Menu/MainMenu/Margin/VBox/MenuItems.add_constant_override("separation", configuration.menu_item_separation)
+	
+	# Set option labels to the menu button style
+	for label in [
+		"SpeechLabel", 
+		"MusicLabel", 
+		"EffectsLabel", 
+		"SubtitlesLabel",
+		"Subtitles",
+		"FullscreenLabel",
+		"Fullscreen",
+		"LocaleLabel"
+	]:
+		var node = get_node("Menu/Options/CenterContainer/VBox/Grid/%s" % label)
+		node.add_font_override(
+			"font",
+			$Menu.get_font(
+				"menu_button",
+				"Button"
+			)
+		)
+		
+	$Menu/SaveSlots/VBox/Title.add_font_override(
+		"font",
+		$Menu/SaveSlots/VBox/Title.get_font(
+			"menu_button",
+			"Button"
+		)
+	)
+	
+	# Set the options values
+	$Menu/Options/CenterContainer/VBox/Grid/SpeechSlider.value = \
+			_get_bus_percent("Speech")
+	$Menu/Options/CenterContainer/VBox/Grid/MusicSlider.value = \
+			_get_bus_percent("Music")
+	$Menu/Options/CenterContainer/VBox/Grid/EffectsSlider.value = \
+			_get_bus_percent("Effects")
+	$Menu/Options/CenterContainer/VBox/Grid/Subtitles.pressed = \
+			EgoVenture.options_get_subtitles()
+	
+	if not configuration.menu_options_hide_language_selection:
+		var added_locales = []
+		
+		# Set languages
+		for locale in TranslationServer.get_loaded_locales():
+			if not locale in added_locales:
+				var locale_button = TextureButton.new()
+				locale_button.set_meta("locale", locale)
+				locale_button.expand = true
+				locale_button.stretch_mode = \
+						TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+				locale_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+				locale_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+				locale_button.mouse_default_cursor_shape = Control.CURSOR_MOVE
+				locale_button.texture_normal = load(
+					"res://addons/egoventure/images/flags/%s.svg" % locale
+				)
+				locale_button.connect(
+					"pressed", 
+					self, 
+					"_on_locale_changed", 
+					[locale]
+				)
+				if locale == EgoVenture.in_game_configuration.locale:
+					locale_button.modulate = EgoVenture.configuration.\
+							menu_options_locale_button_modulate_selected
+				else:
+					locale_button.modulate = EgoVenture.configuration.\
+							menu_options_locale_button_modulate
+				$Menu/Options/CenterContainer/VBox/Grid/Locales.add_child(
+					locale_button
+				)
+				added_locales.push_back(locale)
+	else:
+		$Menu/Options/CenterContainer/VBox/Grid/LocaleLabel.hide()
+		$Menu/Options/CenterContainer/VBox/Grid/Locales.hide()
+	
+	# set save slot page to slot last modified
+	_save_slot_page = _get_save_slot_page_last_modified()
+
+
+# Toggle the display of the menu and play the menu music
+func toggle():
+	if resumeable and not disabled:
+		if EgoVenture.game_started:
+			$Menu/MainMenu/Margin/VBox/MenuItems/Resume.show()
+			$Menu/MainMenu/Margin/VBox/MenuItems/Continue.hide()
+		else:
+			$Menu/MainMenu/Margin/VBox/MenuItems/Continue.show()
+			$Menu/MainMenu/Margin/VBox/MenuItems/Resume.hide()
+			
+			if EgoVenture.has_continue_state():
+				$Menu/MainMenu/Margin/VBox/MenuItems/Continue.disabled = false
+			else:
+				$Menu/MainMenu/Margin/VBox/MenuItems/Continue.disabled = true
+		
+		$Menu/MainMenu/Margin/VBox/MenuItems/Load.disabled = \
+				not EgoVenture.saves_exist
+				
+		if $Menu.visible:
+			Speedy.hidden = _mouse_was_hidden
+		else:
+			_mouse_was_hidden = Speedy.hidden
+			Speedy.hidden = false
+		
+		$Menu.visible = !$Menu.visible
+		
+		var target_shape = Input.CURSOR_ARROW
+		var mousePos = get_viewport().get_mouse_position() + offset
+
+		for child in self.get_children():
+			if "mouse_default_cursor_shape" in child and child.visible:
+				var global_rect = child.get_global_rect()
+				if global_rect.has_point(mousePos):
+					target_shape = child.mouse_default_cursor_shape
+		Speedy.keep_shape_once = true
+		Speedy.set_shape(target_shape)
+		
+		get_tree().paused = !get_tree().paused
+		if _configuration.menu_music != null and $Menu.visible:
+			if $Menu/Music.stream == null:
+				$Menu/Music.stream = _configuration.menu_music
+			$Menu/Music.play()
+		elif _configuration.menu_music != null:
+			$Menu/Music.stop()
+		
+		if not $Menu.visible:
+			$Menu/SaveSlots.visible = false
+		else:
+			$Menu/Options/CenterContainer/VBox/Grid/Fullscreen.pressed = \
+				EgoVenture.in_game_configuration.fullscreen
+			Speedy.set_shape(Input.CURSOR_ARROW)
+			if EgoVenture.is_touch:
+				$Menu/MainMenu/Margin/VBox/MenuItems/Quit.hide()
+				$Menu/Options/CenterContainer/VBox/Grid/Fullscreen.hide()
+				$Menu/Options/CenterContainer/VBox/Grid/FullscreenLabel.hide()
+
+
+# Resume was pressed. Toggle the menu
+func _on_Resume_pressed():
+	if disabled:
+		disabled = false
+	toggle()
+
+
+# Quit was pressed. Show confirmation
+func _on_Quit_pressed():
+	$Menu/QuitConfirm.popup_centered()
+	$Menu/QuitConfirm.get_ok().release_focus()
+
+
+# Quit was confirmed. Just quit the game
+func _on_QuitConfirm_confirmed():
+	emit_signal("quit_game")
+
+
+# Save was pressed. Show saveslots in save mode
+func _on_Save_pressed():
+	$Menu/SaveSlots/VBox/Title.text = "SAVESLOTS_SAVE"
+	_is_save_mode = true
+	_refresh_saveslots()
+	$Menu/SaveSlots.show()
+
+
+# Load was pressed. Show saveslots in load mode
+func _on_Load_pressed():
+	$Menu/SaveSlots/VBox/Title.text = "SAVESLOTS_LOAD"
+	_is_save_mode = false
+	_refresh_saveslots()
+	$Menu/SaveSlots.show()
+	
+
+# Cancel was pressed. Hide saveslots
+func _on_SaveLoad_Cancel_pressed():
+	$Menu/SaveSlots.hide()
+
+
+# A save slot was selected
+#
+# ** Parameters **
+#
+# - slot: The save slot
+# - exists: Wether the slot already contains a savegame
+func _on_slot_selected(slot: int, exists: bool):
+	if _is_save_mode:
+		if exists:
+			# This save slot exists, show the confirmation dialog
+			_selected_slot = slot
+			$Menu/OverwriteConfirm.popup_centered()
+			$Menu/OverwriteConfirm.get_ok().release_focus()
+		else:
+			if disabled:
+				disabled = false
+			# Briefly hide the menu to snapshot a picture of the current
+			# scene
+			toggle()
+			Speedy.hidden = true
+			yield(VisualServer, "frame_post_draw")
+			var screenshot = get_viewport().get_texture().get_data()
+			var screenshot_size = get_viewport().get_visible_rect().size * .5
+			screenshot.resize(screenshot_size.x, screenshot_size.y, Image.INTERPOLATE_NEAREST)
+			screenshot.flip_y()
+			screenshot.save_png("user://save_%d.png" % slot)
+			yield(VisualServer, "frame_post_draw")
+			Speedy.hidden = false
+			EgoVenture.save(slot)
+	else:
+		if disabled:
+			disabled = false
+		EgoVenture.load(slot)
+
+
+# Overwrite was confirmed, just call the event handler again ignoring
+# the existing save slot
+func _on_OverwriteConfirm_confirmed():
+	_on_slot_selected(_selected_slot, false)
+
+
+# Next page was pressed
+func _on_Next_pressed():
+	_save_slot_page = _save_slot_page + 1
+	_refresh_saveslots()
+
+
+# Previous page was pressed
+func _on_Previous_pressed():
+	if _save_slot_page > 1:
+		_save_slot_page = _save_slot_page - 1
+		_refresh_saveslots()
+
+
+# Options was pressed
+func _on_Options_pressed():
+	$Menu/Options.show()
+
+
+# Return was pressed on the options screen
+func _on_Return_pressed():
+	$Menu/Options.hide()
+
+
+# The speech slider was changed
+# 
+# ** Parameters **
+# 
+# - value: new value
+func _on_speech_Slider_value_changed(value):
+	EgoVenture.options_set_speech_level(_percent_to_db(value))
+	EgoVenture.set_audio_levels()
+	if $Menu/Options.visible \
+			and _configuration.menu_options_speech_sample != null \
+			and not $Menu/Speech.playing:
+		$Menu/Speech.stream = _configuration.menu_options_speech_sample
+		$Menu/Speech.play()
+
+
+# The music slider was changed
+# 
+# ** Parameters **
+# 
+# - value: new value
+func _on_music_Slider_value_changed(value):
+	EgoVenture.options_set_music_level(_percent_to_db(value))
+	EgoVenture.set_audio_levels()
+
+
+# The effects slider was changed
+# 
+# ** Parameters **
+# 
+# - value: new value
+func _on_effects_Slider_value_changed(value):
+	EgoVenture.options_set_effects_level(_percent_to_db(value))
+	EgoVenture.set_audio_levels()
+	if $Menu/Options.visible \
+			and _configuration.menu_options_effects_sample != null \
+			and not $Menu/Effects.playing:
+		$Menu/Effects.stream = _configuration.menu_options_effects_sample
+		$Menu/Effects.play()
+
+
+# The subtitles checkbox was changed
+#
+# ** Parameters **
+#
+# - value: Wether the checkbox is checked or not
+func _on_Subtitles_toggled(value: bool):
+	EgoVenture.options_set_subtitles(value)
+	if $Menu/Options.visible and _configuration.menu_switch_effect != null:
+		$Menu/Effects.stream = _configuration.menu_switch_effect
+		$Menu/Effects.play()
+
+
+# Get the current volume level in db and convert it to a slider percent
+# value from the specified bus
+#
+# ** Arguments **
+# - bus_name: The name of the bus
+#
+# ** Returns **
+# - The slider percent from 0 (- AUDIO_MIN db) to 100 (0 db)
+func _get_bus_percent(bus_name: String) -> float:
+	var db = AudioServer.get_bus_volume_db(AudioServer.get_bus_index(bus_name))
+	return ((db + (AUDIO_MIN * -1)) * 100 / AUDIO_MIN) * -1
+
+
+# Convert a slider percent level to db for an audiobus.
+# 0 percent = -72db, 100 percent = 0 db
+#
+# ** Arguments **
+# - percent: The percent value
+#
+# ** Returns **
+# - The volume value in db
+func _percent_to_db(percent: float) -> float:
+	return ((AUDIO_MIN * -1) * percent / 100) + AUDIO_MIN
+
+
+# Get the last modified timestamp in a readable date format for the
+# save slots based on the format constant
+#
+# ** Arguments **
+# - The slot file name
+#
+# ** Returns **
+# - The last modification timestamp of the file in the date format as configured
+#   in the constant
+func _get_date_from_file(file: String) -> String:
+	var timezone = OS.get_time_zone_info()
+	var datetime = OS.get_datetime_from_unix_time(
+		File.new().get_modified_time(file) + (timezone.bias * 60)
+	)
+	datetime['month'] = "%02d" % datetime['month']
+	datetime['day'] = "%02d" % datetime['day']
+	datetime['year'] = "%04d" % datetime['year']
+	datetime['hour'] = "%02d" % datetime['hour']
+	datetime['minute'] = "%02d" % datetime['minute']
+	return tr("DATEFORMAT").format(datetime)
+
+
+# Get the save slot page containing the slot that was last modified
+func _get_save_slot_page_last_modified() -> int:
+	var slot_last = 0
+	var time_last = 0
+	var save_dir = Directory.new()	
+	if save_dir.open("user://") == OK:
+		if save_dir.list_dir_begin(true) == OK:  # without navigational files
+			# iterate through save files of save directory and compare modification time
+			var slot_filename = save_dir.get_next()
+			while !slot_filename.empty():
+				if !save_dir.current_is_dir():  # skip directories
+					if slot_filename.begins_with("save_") and slot_filename.ends_with(".tres"):
+						var slot_number = slot_filename.trim_prefix("save_").trim_suffix(".tres")
+						if slot_number.is_valid_integer():
+							var slot_time = File.new().get_modified_time("user://" + slot_filename)
+							if slot_time > time_last:
+								time_last = slot_time
+								slot_last = slot_number.to_int()
+				slot_filename = save_dir.get_next()
+	
+	save_dir.list_dir_end()
+	# save slot page numbering starts with 1 and contains 12 save slots
+	return (slot_last / 12) + 1
+
+
+# Refresh the saveslots vie
+func _refresh_saveslots():
+	var save_dir = Directory.new()
+	save_dir.open("user://")
+	
+	if _save_slot_page == 1:
+		$Menu/SaveSlots/VBox/HBox/Previous.modulate = Color(1, 1, 1, 0)
+		$Menu/SaveSlots/VBox/HBox/Previous.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	else:
+		$Menu/SaveSlots/VBox/HBox/Previous.modulate = Color(1, 1, 1, 1)
+		$Menu/SaveSlots/VBox/HBox/Previous.mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
+	
+	for slot in range(0, 12):
+		var save_slot = ((_save_slot_page - 1) * 12) + slot
+		
+		# Set the slot stylebox
+		var slot_node = $Menu/SaveSlots/VBox/HBox/Slots.get_node(
+			"Slot%d" % (slot + 1)
+		)
+		(slot_node.get_node("Slot/Panel") as Panel) \
+				.add_stylebox_override(
+					"panel", 
+					(slot_node.get_node("Slot/Panel") as Panel).get_stylebox(
+						"saveslot_panel",
+						"Panel"
+					)
+				)
+		(slot_node.get_node("Slot/Date") as Label) \
+				.add_font_override(
+					"font",
+					(slot_node.get_node("Slot/Date") as Label).get_font(
+						"saveslots_date",
+						"Label"
+					)
+				)
+		
+		var slot_panel_image: TextureButton
+		var connect_signals: bool = true
+		var slot_exists: bool = false
+		
+		if _empty_image_texture == null:
+			var empty_image: Image = Image.new()
+			empty_image.create(
+				ProjectSettings.get("display/window/size/width") * 0.2,
+				ProjectSettings.get("display/window/size/height") * 0.2,
+				true,
+				Image.FORMAT_RGBAH
+			)
+			empty_image.fill(EgoVenture.configuration.menu_saveslots_empty_color)
+			_empty_image_texture = ImageTexture.new()
+			_empty_image_texture.create_from_image(empty_image)
+		
+		if save_dir.file_exists("save_%d.png" % save_slot) and \
+			save_dir.file_exists("save_%d.tres" % save_slot):
+			
+			# The slot is already taken. Show the saved image and date
+			slot_exists = true
+			
+			var slot_image = Image.new()
+			slot_image.load("user://save_%d.png" % save_slot)	
+			var slot_image_texture = ImageTexture.new()
+			slot_image_texture.create_from_image(slot_image)
+			slot_panel_image = slot_node.get_node("Slot/Panel/Image")
+			slot_panel_image.texture_normal = slot_image_texture
+			
+			slot_panel_image.mouse_default_cursor_shape = \
+					Cursors.CURSOR_MAP[Cursors.Type.MAP]
+			
+			(slot_node.get_node("Slot/Date") as Label).text = \
+					_get_date_from_file("user://save_%d.tres" % save_slot)
+		else:
+			# The slot is free. Show an empty panel and no date
+			slot_panel_image = slot_node.get_node("Slot/Panel/Image")
+			slot_panel_image.texture_normal = _empty_image_texture
+			
+			(slot_node.get_node("Slot/Date") as Label).text = \
+				EgoVenture.configuration.menu_saveslots_free_text
+				
+			slot_panel_image.mouse_default_cursor_shape = \
+					Cursors.CURSOR_MAP[Cursors.Type.MAP]
+				
+			if not _is_save_mode:
+				# Prohibit loading from empty slots
+				connect_signals = false
+				slot_panel_image.mouse_default_cursor_shape = \
+					Cursors.CURSOR_MAP[Cursors.Type.DEFAULT]
+			
+		# Connect the pressed signals for the slot in a clean way
+		if slot_panel_image.is_connected(
+			"pressed", 
+			self, 
+			"_on_slot_selected"
+		):
+			slot_panel_image.disconnect(
+				"pressed", 
+				self, 
+				"_on_slot_selected"
+			)
+			
+		if connect_signals:
+			slot_panel_image.connect(
+				"pressed", 
+				self, 
+				"_on_slot_selected", 
+				[save_slot, slot_exists]
+			)
+
+
+# The continue button was pressed
+func _on_Continue_pressed():
+	if disabled:
+		disabled = false
+	EgoVenture.load_continue()
+
+
+# The New Game button was pressed
+func _on_NewGame_pressed():
+	if EgoVenture.has_continue_state():
+		$Menu/RestartConfirm.popup_centered()
+		$Menu/RestartConfirm.get_ok().release_focus()
+	else:
+		_on_RestartConfirm_confirmed()
+
+
+# Restarting the game was confirmed
+func _on_RestartConfirm_confirmed():
+	EgoVenture.reset()
+	if disabled:
+		disabled = false
+	toggle()
+	emit_signal("new_game")
+
+
+# Toggle menu when rmb button clicked or esc pushed
+func _on_Menu_gui_input(event):
+	if event.is_action_released("ui_menu"):
+		toggle()
+
+
+# Stop speech sample on mouse release
+func _on_SpeechSlider_gui_input(event):
+	if event is InputEventMouseButton and not \
+			(event as InputEventMouseButton).pressed:
+		if $Menu/Speech.get_playback_position() < MINIMUM_SAMPLE_TIME:
+			yield(
+				get_tree().create_timer(
+					MINIMUM_SAMPLE_TIME - $Menu/Speech.get_playback_position()
+				), 
+				"timeout"
+			)
+		$Menu/Speech.stop()
+
+
+# Stop effects sample on mouse release
+func _on_EffectsSlider_gui_input(event):
+	if event is InputEventMouseButton and not \
+			(event as InputEventMouseButton).pressed:
+		if $Menu/Effects.get_playback_position() < MINIMUM_SAMPLE_TIME:
+			yield(
+				get_tree().create_timer(
+					MINIMUM_SAMPLE_TIME - $Menu/Effects.get_playback_position()
+				), 
+				"timeout"
+			)
+		$Menu/Effects.stop()
+
+
+func _on_Fullscreen_toggled(button_pressed):
+	EgoVenture.in_game_configuration.fullscreen = button_pressed
+	EgoVenture.save_in_game_configuration()
+	EgoVenture.set_full_screen()
+	if $Menu/Options.visible and _configuration.menu_switch_effect != null:
+		$Menu/Effects.stream = _configuration.menu_switch_effect
+		$Menu/Effects.play()
+
+
+func _on_locale_changed(locale: String):
+	for locale_button in \
+			$Menu/Options/CenterContainer/VBox/Grid/Locales.get_children():
+		if locale_button.get_meta("locale") != locale:
+			locale_button.modulate = EgoVenture.configuration.\
+					menu_options_locale_button_modulate
+		else:
+			locale_button.modulate = EgoVenture.configuration.\
+					menu_options_locale_button_modulate_selected
+		
+	EgoVenture.in_game_configuration.locale = locale
+	EgoVenture.save_in_game_configuration()
+	TranslationServer.set_locale(locale)
