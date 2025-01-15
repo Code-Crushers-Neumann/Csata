@@ -9,3 +9,35 @@ script = ExtResource( 1 )
 margin_right = 1920.0
 margin_bottom = 1080.0
 color = Color( 0.682353, 0.678431, 0.678431, 1 )
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+margin_left = 78.0
+margin_top = 405.0
+margin_right = 434.0
+margin_bottom = 727.0
+rect_pivot_offset = Vector2( 100, 238 )
+color = Color( 0.309804, 0.0666667, 0.0666667, 1 )
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+margin_left = 756.0
+margin_top = 763.0
+margin_right = 1112.0
+margin_bottom = 1085.0
+rect_pivot_offset = Vector2( 426, 184 )
+color = Color( 0.309804, 0.0666667, 0.0666667, 1 )
+
+[node name="ColorRect4" type="ColorRect" parent="."]
+margin_left = 1452.0
+margin_top = 406.0
+margin_right = 1808.0
+margin_bottom = 728.0
+rect_pivot_offset = Vector2( 426, 184 )
+color = Color( 0.309804, 0.0666667, 0.0666667, 1 )
+
+[node name="ColorRect5" type="ColorRect" parent="."]
+margin_left = 780.0
+margin_top = 28.0
+margin_right = 1136.0
+margin_bottom = 350.0
+rect_pivot_offset = Vector2( 426, 184 )
+color = Color( 0.309804, 0.0666667, 0.0666667, 1 )
