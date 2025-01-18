@@ -214,7 +214,7 @@ func generate_dungeon():
 		fully_connected = is_fully_connected()
 	
 	generate_enemy_grid()  # Generate the enemy grid
-	print_grid()
+	#print_grid()
 	build_dungeon()
 
 # Call the main function when the script runs
