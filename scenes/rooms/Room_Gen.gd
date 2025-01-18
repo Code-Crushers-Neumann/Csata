@@ -15,7 +15,7 @@ func initiate(var _name):
 	var szinarray = generate_analogous_colors(szin)
 	get_node("Wall").modulate = szin
 	get_node("Floor").modulate = szinarray[2]
-	get_node("Wall").texture = load("res://images/walls/1/"+_name+".png")
+	get_node("Wall").texture = load("res://images/walls/"+choose(["1","2","3"])+"/"+_name+".png")
 	get_node("Floor").texture = load("res://images/floors/"+choose(["1","2","3"])+".png")
 
 func choose(array):
