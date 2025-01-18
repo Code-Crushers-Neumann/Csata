@@ -104,5 +104,5 @@ func rgb_to_hsv(color: Color) -> Array:
 
 
 func _on_Area2D_body_entered(body):
-	#print("here something is supposed to happen...")
+	print(id)
 	get_parent().move_player(id[1],id[0])
