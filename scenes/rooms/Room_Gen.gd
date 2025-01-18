@@ -1,6 +1,6 @@
 extends Node2D
 
-var id
+var id = [0,0]
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -12,7 +12,8 @@ func _ready():
 	pass
 
 func initiate(var _name,var _id):
-	var szin = Color8((randi() % 206)+50,(randi() % 206)+50,(randi() % 206)+50)
+	var szin = Color8((randi() % 206)+50,0,0)
+	print(_id)
 	id = _id
 	var szinarray = generate_analogous_colors(szin)
 	get_node("Wall").modulate = szin
@@ -103,4 +104,5 @@ func rgb_to_hsv(color: Color) -> Array:
 
 
 func _on_Area2D_body_entered(body):
-	get_parent().move_player(id[1],id[0])
+	print("here something is supposed to happen...")
+	get_parent().move_player(id[0],id[1])

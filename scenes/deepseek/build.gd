@@ -7,8 +7,8 @@ var directions = ["Up", "Down", "Left", "Right"]
 var opposite = {"Up": "Down", "Down": "Up", "Left": "Right", "Right": "Left"}
 
 # Grid dimensions (can be changed)
-var grid_width = 3  # Example: 2 columns
-var grid_height = 3 # Example: 2 rows
+var grid_width = 2  # Example: 2 columns
+var grid_height = 2 # Example: 2 rows
 
 # Player position in the grid
 var player_x: int
@@ -169,6 +169,8 @@ func build_dungeon():
 				room_instance.initiate(scene_name,[y,x])
 				# Position the room in the world
 				room_instance.position = Vector2(x * room_width, y * room_height)
+				if(!enemy_grid[y][x]):
+					get_node("test_player").position = Vector2((x * room_width)+1920/2, (y * room_height)+1080/2)
 				
 				# Add the room to the scene
 				add_child(room_instance)
@@ -196,7 +198,7 @@ func move_player(new_x: int, new_y: int):
 		player_x = new_x
 		player_y = new_y
 		update_camera_position()
-		#print("Player moved to room (", player_x, ",", player_y, ")")
+		print("Player moved to room (", player_x, ",", player_y, ")")
 	else:
 		print("Invalid move: Player cannot move outside the grid.")
 
@@ -220,4 +222,3 @@ func _ready():
 	generate_dungeon()
 	yield(get_tree().create_timer(2),"timeout")
 	get_node("Camera2D").smoothing_enabled = true
-	move_player(0,0)
