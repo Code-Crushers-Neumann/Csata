@@ -27,7 +27,8 @@ func _on_triggered_inventory_item(item1: InventoryItem, item2: InventoryItem):
 func _on_new_game():
 	_initialization()
 	# Should call an introduction sequence
-	#EgoVenture.change_scene("res://scenes/intro.tscn")
+	EgoVenture.change_scene("res://scenes/deepseek/build.tscn")
+	Inventory.disable()
 
 
 # Initialize the game state
