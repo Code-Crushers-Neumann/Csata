@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 var velocity := Vector2()
-var speed = 250
+var speed = 500
 var x = (180/PI)
 var last = 0
 

@@ -12,7 +12,7 @@ func _ready():
 	pass
 
 func initiate(var _name,var _id):
-	var szin = Color8((randi() % 206)+50,0,0)
+	var szin = Color8((randi() % 156)+50,(randi() % 156)+50,(randi() % 156)+50)
 	print(_id)
 	id = _id
 	var szinarray = generate_analogous_colors(szin)
@@ -105,4 +105,4 @@ func rgb_to_hsv(color: Color) -> Array:
 
 func _on_Area2D_body_entered(body):
 	print("here something is supposed to happen...")
-	get_parent().move_player(id[0],id[1])
+	get_parent().move_player(id[1],id[0])
