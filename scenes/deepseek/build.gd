@@ -171,6 +171,7 @@ func build_dungeon():
 				room_instance.position = Vector2(x * room_width, y * room_height)
 				if(!enemy_grid[y][x]):
 					get_node("test_player").position = Vector2((x * room_width)+1920/2, (y * room_height)+1080/2)
+					move_player(y,x)
 				
 				# Add the room to the scene
 				add_child(room_instance)
@@ -184,7 +185,7 @@ func build_dungeon():
 				print("Scene not found: ", scene_path)
 	
 	# Set the camera to the player's starting position
-	update_camera_position()
+	#update_camera_position()
 
 # Update the camera position based on the player's current room
 func update_camera_position():
@@ -213,7 +214,7 @@ func generate_dungeon():
 		fully_connected = is_fully_connected()
 	
 	generate_enemy_grid()  # Generate the enemy grid
-	#print_grid()
+	print_grid()
 	build_dungeon()
 
 # Call the main function when the script runs
