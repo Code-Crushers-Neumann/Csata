@@ -1,5 +1,6 @@
 extends Node2D
 
+var id
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -8,15 +9,18 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
 
-func initiate(var _name):
+func initiate(var _name,var _id):
 	var szin = Color8((randi() % 206)+50,(randi() % 206)+50,(randi() % 206)+50)
+	id = _id
 	var szinarray = generate_analogous_colors(szin)
 	get_node("Wall").modulate = szin
 	get_node("Floor").modulate = szinarray[2]
 	get_node("Wall").texture = load("res://images/walls/"+choose(["1","2","3"])+"/"+_name+".png")
 	get_node("Floor").texture = load("res://images/floors/"+choose(["1","2","3"])+".png")
+	for adat in _name.split('_'):
+		get_node("ToOpen/"+adat).queue_free()
 
 func choose(array):
 	return array[randi() % array.size()]
@@ -96,3 +100,7 @@ func rgb_to_hsv(color: Color) -> Array:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _on_Area2D_body_entered(body):
+	get_parent().move_player(id[1],id[0])

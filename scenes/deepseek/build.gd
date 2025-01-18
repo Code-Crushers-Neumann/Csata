@@ -166,7 +166,7 @@ func build_dungeon():
 			if ResourceLoader.exists(scene_path):
 				var room_scene = load(scene_path)
 				var room_instance = room_scene.instance()  # Use instance() in Godot 3.x
-				room_instance.initiate(scene_name)
+				room_instance.initiate(scene_name,[y,x])
 				# Position the room in the world
 				room_instance.position = Vector2(x * room_width, y * room_height)
 				
@@ -216,6 +216,7 @@ func generate_dungeon():
 
 # Call the main function when the script runs
 func _ready():
+	Inventory.disable()
 	generate_dungeon()
 	yield(get_tree().create_timer(2),"timeout")
 	get_node("Camera2D").smoothing_enabled = true

@@ -1,6 +1,27 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scenes/rooms/Room_Gen.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 398, 40.5 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 39, 211.5 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 158.875, 38.5 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 160.25, 40 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 36.5, 119.5 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 38.5, 125 )
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 960, 540.5 )
 
 [node name="Down_Right_Up" type="Node2D"]
 script = ExtResource( 1 )
@@ -11,3 +32,61 @@ centered = false
 
 [node name="Floor" type="Sprite" parent="."]
 centered = false
+
+[node name="WillStay" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WillStay"]
+position = Vector2( 398, 40.5 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="WillStay"]
+position = Vector2( 1522, 40 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="WillStay"]
+position = Vector2( 398, 1044 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="WillStay"]
+position = Vector2( 1520, 1045 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="WillStay"]
+position = Vector2( 37, 870 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="WillStay"]
+position = Vector2( 1887, 871 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="WillStay"]
+position = Vector2( 1889, 208 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="WillStay"]
+position = Vector2( 37, 210.5 )
+shape = SubResource( 2 )
+
+[node name="ToOpen" type="StaticBody2D" parent="."]
+
+[node name="Down" type="CollisionShape2D" parent="ToOpen"]
+position = Vector2( 961, 1042 )
+shape = SubResource( 3 )
+
+[node name="Up" type="CollisionShape2D" parent="ToOpen"]
+position = Vector2( 961.75, 41 )
+shape = SubResource( 4 )
+
+[node name="Left" type="CollisionShape2D" parent="ToOpen"]
+position = Vector2( 39.5, 540.5 )
+shape = SubResource( 5 )
+
+[node name="Right" type="CollisionShape2D" parent="ToOpen"]
+position = Vector2( 1884.5, 539 )
+shape = SubResource( 6 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 960, 540.5 )
+shape = SubResource( 7 )
