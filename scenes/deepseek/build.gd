@@ -198,7 +198,7 @@ func move_player(new_x: int, new_y: int):
 		player_x = new_x
 		player_y = new_y
 		update_camera_position()
-		print("Player moved to room (", player_x, ",", player_y, ")")
+		#print("Player moved to room (", player_x, ",", player_y, ")")
 	else:
 		print("Invalid move: Player cannot move outside the grid.")
 
