@@ -19,18 +19,7 @@ func _physics_process(delta):
 
 
 func _on_VirtualJoystick2_analogic_chage(move):
-	self.rotation_degrees = move.angle()*x
-	
-	if(abs(move.angle()*x-last) > 90 && !(abs(move.angle()*x-last) > 180)):
-		get_node("CollisionShape2D/Sprite").flip_h = false
-		get_node("CollisionShape2D/Sprite").flip_v = false
-	else:
-		get_node("CollisionShape2D/Sprite").flip_h = true
-		if(move.angle()*x >= 90-90 && 180-90 >= move.angle()*x || move.angle()*x >= -180+90 && -90+90 >= move.angle()*x):
-			get_node("CollisionShape2D/Sprite").flip_v = false
-		elif!(move.angle()*x >= 90-90 && 180-90 >= move.angle()*x || move.angle()*x >= -180+90 && -90+90 >= move.angle()*x):
-			get_node("CollisionShape2D/Sprite").flip_v = true
-	last = move.angle()*x
+	get_node("Gun").rotation_degrees = move.angle()*x
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -39,3 +28,15 @@ func _on_VirtualJoystick2_analogic_chage(move):
 
 func _on_VirtualJoystick_analogic_chage(move):
 	velocity = move
+	print(move.angle()*x)
+	if(abs(move.angle()*x) >= 90):
+		get_node("CollisionShape2D/Sprite").flip_h = true
+	else:
+		get_node("CollisionShape2D/Sprite").flip_h = false
+
+	if(velocity == Vector2(0,0)):
+		if(abs(last) >= 90):
+			get_node("CollisionShape2D/Sprite").flip_h = true
+		else:
+			get_node("CollisionShape2D/Sprite").flip_h = false
+	last = move.angle()*x

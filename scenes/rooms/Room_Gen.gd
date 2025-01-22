@@ -2,6 +2,13 @@ extends Node2D
 
 var id = [0,0]
 
+var allpos = [Vector2(200,200),Vector2(600,200),Vector2(1000,200), Vector2(1400,200), Vector2(200,540),Vector2(600,540),Vector2(1000,540),Vector2(1400,540),Vector2(200,880),Vector2(600,880),Vector2(1000,880),Vector2(1400,880)]
+var TopExcl = [allpos[1],allpos[2]]
+var LeftExcl = [allpos[4] , allpos[5]]
+var BottomExcl = [allpos[9], allpos[10]]
+var RightExcl = [allpos[6] , allpos[7]]
+
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -11,9 +18,30 @@ var id = [0,0]
 func _ready():
 	pass
 
-func initiate(var _name,var _id):
+func initiate(var _name,var _id, var spawning):
 	var szin = Color8((randi() % 156)+50,(randi() % 156)+50,(randi() % 156)+50)
+	if(spawning):
+		var directions = _name.split('_')
+		if directions.has("Up"):
+			for adat in TopExcl:
+				allpos.erase(adat)
+		if directions.has("Down"):
+			for adat in BottomExcl:
+				allpos.erase(adat)
+		if directions.has("Left"):
+			for adat in LeftExcl:
+				allpos.erase(adat)
+		if directions.has("Right"):
+			for adat in RightExcl:
+				allpos.erase(adat)
+		var nodelocal = self.position
+		for adat in allpos:
+			var spawn = nodelocal + adat
+
+	else:
+		allpos = []
 	#print(_id)
+	print(allpos)
 	id = _id
 	var szinarray = generate_analogous_colors(szin)
 	get_node("Wall").modulate = szin

@@ -7,8 +7,8 @@ var directions = ["Up", "Down", "Left", "Right"]
 var opposite = {"Up": "Down", "Down": "Up", "Left": "Right", "Right": "Left"}
 
 # Grid dimensions (can be changed)
-var grid_width = 3  # Example: 2 columns
-var grid_height = 3 # Example: 2 rows
+var grid_width = 2  # Example: 2 columns
+var grid_height = 2 # Example: 2 rows
 
 # Player position in the grid
 var player_x: int
@@ -166,7 +166,7 @@ func build_dungeon():
 			if ResourceLoader.exists(scene_path):
 				var room_scene = load(scene_path)
 				var room_instance = room_scene.instance()  # Use instance() in Godot 3.x
-				room_instance.initiate(scene_name,[y,x])
+				room_instance.initiate(scene_name,[y,x], enemy_grid[y][x])
 				# Position the room in the world
 				room_instance.position = Vector2(x * room_width, y * room_height)
 				if(!enemy_grid[y][x]):
