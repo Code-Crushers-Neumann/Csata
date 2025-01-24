@@ -36,6 +36,8 @@ centered = false
 centered = false
 
 [node name="WillStay" type="StaticBody2D" parent="."]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WillStay"]
 position = Vector2( 398, 40.5 )

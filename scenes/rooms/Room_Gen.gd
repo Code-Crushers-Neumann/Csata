@@ -1,6 +1,7 @@
 extends Node2D
 
 var id = [0,0]
+var enemies = []
 
 var allpos = [Vector2(200,200),Vector2(600,200),Vector2(1000,200), Vector2(1400,200), Vector2(200,540),Vector2(600,540),Vector2(1000,540),Vector2(1400,540),Vector2(200,880),Vector2(600,880),Vector2(1000,880),Vector2(1400,880)]
 var TopExcl = [allpos[1],allpos[2]]

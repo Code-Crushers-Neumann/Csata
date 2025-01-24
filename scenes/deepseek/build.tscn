@@ -66,5 +66,9 @@ z_index = 6
 texture = ExtResource( 7 )
 offset = Vector2( 46, 0 )
 
+[node name="ShootCooldownTimer" type="Timer" parent="test_player"]
+wait_time = 2.0
+
 [connection signal="analogic_chage" from="CanvasLayer/VirtualJoystick" to="test_player" method="_on_VirtualJoystick_analogic_chage"]
 [connection signal="analogic_chage" from="CanvasLayer/VirtualJoystick2" to="test_player" method="_on_VirtualJoystick2_analogic_chage"]
+[connection signal="timeout" from="test_player/ShootCooldownTimer" to="test_player" method="_on_ShootCooldownTimer_timeout"]

@@ -1,4 +1,4 @@
-extends Node2D
+extends KinematicBody2D
 
 onready var player = get_tree().get_root().get_child(15).get_node("test_player")
 # Declare member variables here. Examples:
@@ -8,9 +8,12 @@ onready var player = get_tree().get_root().get_child(15).get_node("test_player")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	get_parent().enemies.append(self)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	get_node("KinematicBody2D").move_and_slide((player.global_position-global_position).normalized()*175)
+	if(player.get_parent().player_x == get_parent().id[1] && player.get_parent().player_y == get_parent().id[0]):
+		self.move_and_slide((player.global_position-global_position).normalized()*100)
+
+

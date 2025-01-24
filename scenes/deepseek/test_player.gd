@@ -19,15 +19,36 @@ func _physics_process(delta):
 	move_and_slide(velocity*speed)
 
 
+var can_shoot = true
+
 func _on_VirtualJoystick2_analogic_chage(move):
-	get_node("Gun").rotation_degrees = move.angle()*x
-	if(abs(move.angle()*x) == 0):
-		get_node("Gun").rotation_degrees = last2
-	last2 = move.angle()*x
+    get_node("Gun").rotation_degrees = move.angle() * x
+    if abs(move.angle() * x) == 0:
+        get_node("Gun").rotation_degrees = last2
+    last2 = move.angle() * x
+
+    if can_shoot:
+        shoot_bullet(move)
+        can_shoot = false
+        $ShootCooldownTimer.start()
+
+func shoot_bullet(move):
+	print("lő")
+	var bullet_scene = load("res://scenes/bullets/bullet_player.tscn")
+	var bullet = bullet_scene.instance()
+	bullet.merre(move)
+	bullet.position = get_node("Gun").global_position
+	bullet.rotation_degrees = get_node("Gun").rotation_degrees
+	get_parent().add_child(bullet)
+
+func _on_ShootCooldownTimer_timeout():
+    can_shoot = true
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
 
 
 func _on_VirtualJoystick_analogic_chage(move):
