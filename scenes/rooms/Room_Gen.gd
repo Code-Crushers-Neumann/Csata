@@ -37,6 +37,10 @@ func initiate(var _name,var _id, var spawning):
 		var nodelocal = self.position
 		for adat in allpos:
 			var spawn = nodelocal + adat
+			var newenemy_scene = load("res://scenes/enemy/enemy_1.tscn")
+			var newenemy = newenemy_scene.instance()
+			newenemy.position = spawn
+			add_child(newenemy)
 
 	else:
 		allpos = []
@@ -133,4 +137,5 @@ func rgb_to_hsv(color: Color) -> Array:
 
 func _on_Area2D_body_entered(body):
 	print(id)
-	get_parent().move_player(id[1],id[0])
+	if(body.name == "test_player"):
+		get_parent().move_player(id[1],id[0])

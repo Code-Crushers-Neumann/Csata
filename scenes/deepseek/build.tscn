@@ -43,6 +43,7 @@ border = ExtResource( 2 )
 stick = ExtResource( 3 )
 
 [node name="test_player" type="KinematicBody2D" parent="."]
+unique_name_in_owner = true
 position = Vector2( -286, -222 )
 z_index = 3
 script = ExtResource( 6 )
