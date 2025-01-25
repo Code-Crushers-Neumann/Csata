@@ -101,7 +101,9 @@ func set_health(new_health: int):
 	update_health_bar()
 	if health == 0:
 		self.queue_free()
+	self.modulate = Color8(255,100,100,255)
 
 
 func _on_DamageCooldownTimer_timeout():
 	can_take_damage = true
+	self.modulate = Color8(255,255,255,255)

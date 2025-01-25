@@ -25,6 +25,16 @@ var enemy_grid = []  # Grid to determine if a room has enemies
 # Reference to the Camera2D node
 onready var camera = $Camera2D
 
+# Track all instanced rooms
+var instanced_rooms = []
+
+# Minimap colors
+enum MinimapColor { GREY, GREEN, RED, BLUE }
+
+# Reference to the GridContainer and ColorRect nodes
+onready var minimap_grid = $CanvasLayer/GridContainer
+var minimap_cells = []
+
 # Function to generate a room based on constraints
 func generate_room(x: int, y: int) -> Array:
 	var possible_directions = directions.duplicate()
@@ -152,6 +162,9 @@ func print_grid():
 
 # Build the dungeon by instantiating room scenes
 func build_dungeon():
+	# Clear previously instanced rooms
+	clear_rooms()
+	
 	for y in range(grid_height):
 		for x in range(grid_width):
 			# Sort the room directions alphabetically
@@ -166,26 +179,30 @@ func build_dungeon():
 			if ResourceLoader.exists(scene_path):
 				var room_scene = load(scene_path)
 				var room_instance = room_scene.instance()  # Use instance() in Godot 3.x
-				room_instance.initiate(scene_name,[y,x], enemy_grid[y][x])
+				room_instance.initiate(scene_name, [y, x], enemy_grid[y][x])
+				
 				# Position the room in the world
 				room_instance.position = Vector2(x * room_width, y * room_height)
-				if(!enemy_grid[y][x]):
-					get_node("test_player").position = Vector2((x * room_width)+1920/2, (y * room_height)+1080/2)
-					move_player(y,x)
 				
-				# Add the room to the scene
+				# Set player position if this is the spawn room
+				if !enemy_grid[y][x]:
+					get_node("test_player").position = Vector2((x * room_width) + room_width / 2, (y * room_height) + room_height / 2)
+					move_player(x, y)
+				
+				# Add the room to the scene and track it
 				add_child(room_instance)
-				
-				# Set whether the room has enemies or not
-#				if enemy_grid[y][x]:
-#					print("Room at (", x, ",", y, ") has enemies.")
-#				else:
-#					print("Room at (", x, ",", y, ") is the player spawn (no enemies).")
+				instanced_rooms.append(room_instance)
 			else:
 				print("Scene not found: ", scene_path)
 	
 	# Set the camera to the player's starting position
-	#update_camera_position()
+	update_camera_position()
+
+# Clear all previously instanced rooms
+func clear_rooms():
+	for room in instanced_rooms:
+		room.queue_free()  # Remove the room from the scene tree
+	instanced_rooms = []  # Reset the list of instanced rooms
 
 # Update the camera position based on the player's current room
 func update_camera_position():
@@ -199,9 +216,55 @@ func move_player(new_x: int, new_y: int):
 		player_x = new_x
 		player_y = new_y
 		update_camera_position()
-		#print("Player moved to room (", player_x, ",", player_y, ")")
+		update_minimap()  # Update the minimap when the player moves
 	else:
 		print("Invalid move: Player cannot move outside the grid.")
+
+# Generate the minimap as a 3x3 grid
+func generate_minimap() -> Array:
+	var minimap = []
+	for i in range(3):
+		var row = []
+		for j in range(3):
+			row.append(MinimapColor.GREY)  # Default to grey (non-existent)
+		minimap.append(row)
+	
+	# Center the minimap around the player
+	for i in range(-1, 2):
+		for j in range(-1, 2):
+			var x = player_x + j
+			var y = player_y + i
+			
+			# Check if the room exists
+			if x >= 0 and x < grid_width and y >= 0 and y < grid_height:
+				if x == player_x and y == player_y:
+					minimap[i + 1][j + 1] = MinimapColor.BLUE  # Player's room
+				elif enemy_grid[y][x]:
+					minimap[i + 1][j + 1] = MinimapColor.RED  # Room with enemies
+				else:
+					minimap[i + 1][j + 1] = MinimapColor.GREEN  # Room without enemies
+	
+	return minimap
+
+# Update the minimap display
+func update_minimap():
+	var minimap = generate_minimap()
+	
+	# Update the ColorRect nodes based on the minimap
+	for i in range(3):
+		for j in range(3):
+			var cell_index = i * 3 + j
+			var cell = minimap_grid.get_child(cell_index)
+			
+			match minimap[i][j]:
+				MinimapColor.GREY:
+					cell.color = Color(0.5, 0.5, 0.5)  # Grey
+				MinimapColor.GREEN:
+					cell.color = Color(0, 1, 0)  # Green
+				MinimapColor.RED:
+					cell.color = Color(1, 0, 0)  # Red
+				MinimapColor.BLUE:
+					cell.color = Color(0, 0, 1)  # Blue
 
 # Main function to generate and build the dungeon
 func generate_dungeon():
@@ -214,12 +277,16 @@ func generate_dungeon():
 		fully_connected = is_fully_connected()
 	
 	generate_enemy_grid()  # Generate the enemy grid
-	#print_grid()
 	build_dungeon()
+	update_minimap()  # Initialize the minimap
 
 # Call the main function when the script runs
 func _ready():
 	Inventory.disable()
 	generate_dungeon()
-	yield(get_tree().create_timer(1),"timeout")
+	yield(get_tree().create_timer(1), "timeout")
 	get_node("Camera2D").smoothing_enabled = true
+
+# Function to reset the dungeon
+func reset_dungeon():
+	generate_dungeon()

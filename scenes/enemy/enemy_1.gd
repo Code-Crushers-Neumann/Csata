@@ -21,7 +21,8 @@ func die():
 	if(get_parent().enemies.empty()):
 		get_tree().get_root().get_child(15).enemy_grid[get_parent().id[0]][get_parent().id[1]] = false
 		if are_all_elements_false(get_tree().get_root().get_child(15).enemy_grid):
-			get_tree().get_root().get_child(15).get_node("test_player").queue_free()
+			yield(get_tree().create_timer(2),"timeout")
+			get_parent().get_parent().reset_dungeon()
 	#print(get_tree().get_root().get_child(15).enemy_grid)
 	get_node("CollisionShape2D/AnimatedSprite").play("dead")
 	for i in 255:
