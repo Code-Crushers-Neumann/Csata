@@ -210,7 +210,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/egoventure/plugin.cfg", "res://addons/parrot/plugin.cfg", "res://addons/speedy_gonzales/plugin.cfg", "res://addons/virtual_joystick/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/egoventure/plugin.cfg", "res://addons/parrot/plugin.cfg", "res://addons/speedy_gonzales/plugin.cfg" )
 
 [importer_defaults]
 
