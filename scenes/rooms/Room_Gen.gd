@@ -36,17 +36,28 @@ func initiate(var _name,var _id, var spawning):
 			for adat in RightExcl:
 				allpos.erase(adat)
 		var nodelocal = self.position
-		for adat in allpos:
-			var spawn = nodelocal + adat
-			var newenemy_scene = load("res://scenes/enemy/enemy_1.tscn")
-			var newenemy = newenemy_scene.instance()
-			newenemy.position = spawn
-			add_child(newenemy)
+		var voltman = []
+		for i in rand_range(1,allpos.size()-1):
+			var currentpos = choose(allpos)
+			if!(currentpos in voltman):
+				var spawn = nodelocal + allpos[i]
+				var newenemy_scene = load("res://scenes/enemy/enemy_1.tscn")
+				var newenemy = newenemy_scene.instance()
+				newenemy.position = spawn
+				add_child(newenemy)
+				voltman.append(currentpos)
+
+		#for adat in allpos:
+		#	var spawn = nodelocal + adat
+		#	var newenemy_scene = load("res://scenes/enemy/enemy_1.tscn")
+		#	var newenemy = newenemy_scene.instance()
+		#	newenemy.position = spawn
+		#	add_child(newenemy)
 
 	else:
 		allpos = []
 	#print(_id)
-	print(allpos)
+	#print(allpos)
 	id = _id
 	var szinarray = generate_analogous_colors(szin)
 	get_node("Wall").modulate = szin

@@ -29,6 +29,7 @@ current = true
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="VirtualJoystick" type="Node2D" parent="CanvasLayer"]
+modulate = Color( 1, 1, 1, 0.490196 )
 position = Vector2( 250, 850 )
 scale = Vector2( 3, 3 )
 script = ExtResource( 4 )
@@ -36,17 +37,40 @@ border = ExtResource( 2 )
 stick = ExtResource( 3 )
 
 [node name="VirtualJoystick2" type="Node2D" parent="CanvasLayer"]
+modulate = Color( 1, 1, 1, 0.490196 )
 position = Vector2( 1670, 850 )
 scale = Vector2( 3, 3 )
 script = ExtResource( 4 )
 border = ExtResource( 2 )
 stick = ExtResource( 3 )
 
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+modulate = Color( 1, 1, 1, 0.490196 )
+margin_left = 1352.0
+margin_top = 74.0
+margin_right = 1991.0
+margin_bottom = 285.0
+rect_scale = Vector2( 0.75, 0.75 )
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+margin_bottom = 211.0
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+margin_left = 4.0
+margin_right = 4.0
+margin_bottom = 211.0
+
+[node name="TextureRect3" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+margin_left = 8.0
+margin_right = 8.0
+margin_bottom = 211.0
+
 [node name="test_player" type="KinematicBody2D" parent="."]
 unique_name_in_owner = true
 position = Vector2( -286, -222 )
 z_index = 3
 script = ExtResource( 6 )
+heart_paths = [ NodePath("../CanvasLayer/HBoxContainer/TextureRect"), NodePath("../CanvasLayer/HBoxContainer/TextureRect2"), NodePath("../CanvasLayer/HBoxContainer/TextureRect3") ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="test_player"]
 position = Vector2( 0, 1 )
@@ -67,8 +91,11 @@ texture = ExtResource( 7 )
 offset = Vector2( 46, 0 )
 
 [node name="ShootCooldownTimer" type="Timer" parent="test_player"]
-wait_time = 2.0
+wait_time = 0.9
+
+[node name="DamageCooldownTimer" type="Timer" parent="test_player"]
 
 [connection signal="analogic_chage" from="CanvasLayer/VirtualJoystick" to="test_player" method="_on_VirtualJoystick_analogic_chage"]
 [connection signal="analogic_chage" from="CanvasLayer/VirtualJoystick2" to="test_player" method="_on_VirtualJoystick2_analogic_chage"]
 [connection signal="timeout" from="test_player/ShootCooldownTimer" to="test_player" method="_on_ShootCooldownTimer_timeout"]
+[connection signal="timeout" from="test_player/DamageCooldownTimer" to="test_player" method="_on_DamageCooldownTimer_timeout"]

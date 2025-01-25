@@ -19,4 +19,15 @@ func merre(move):
 	hova = move
 
 func _physics_process(delta):
-	move_and_slide(hova*500)
+	var velocity = move_and_slide(hova*500)
+	if velocity == Vector2.ZERO:
+		self.queue_free()
+
+func _on_Area2D_body_entered(body:Node):
+	if"enemy_1" in body.name:
+		body.die()
+		self.queue_free()
+	if "WillStay" in body.name:
+		self.queue_free()
+	if "ToOpen" in body.name:
+		self.queue_free()
