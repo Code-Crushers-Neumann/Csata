@@ -78,14 +78,14 @@ export(Array, NodePath) var heart_paths = []
 # Resolved TextureRect nodes
 var hearts: Array = []
 
-# Player's health (max 9)
-var health: int = 9
+# Player's health (max 6)
+var health: int = 6
 
 
 # Function to update the health bar
 func update_health_bar():
-	var full_hearts = health / 3  # Number of full hearts
-	var half_hearts = health % 3  # Remainder to determine half hearts
+	var full_hearts = health / 2  # Number of full hearts
+	var half_hearts = health % 2  # Remainder to determine half hearts
 
 	for i in range(hearts.size()):
 		if i < full_hearts:
@@ -97,7 +97,7 @@ func update_health_bar():
 
 # Function to change health (call this when the player takes damage or heals)
 func set_health(new_health: int):
-	health = clamp(new_health, 0, 9)  # Ensure health stays between 0 and 9
+	health = clamp(new_health, 0, 6)  # Ensure health stays between 0 and 9
 	update_health_bar()
 	if health == 0:
 		self.queue_free()
