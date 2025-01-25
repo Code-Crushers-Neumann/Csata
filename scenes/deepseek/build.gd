@@ -7,8 +7,8 @@ var directions = ["Up", "Down", "Left", "Right"]
 var opposite = {"Up": "Down", "Down": "Up", "Left": "Right", "Right": "Left"}
 
 # Grid dimensions (can be changed)
-var grid_width = 3  # Example: 2 columns
-var grid_height = 3 # Example: 2 rows
+var grid_width = 10  # Example: 3 columns
+var grid_height = 10 # Example: 3 rows
 
 # Player position in the grid
 var player_x: int
@@ -32,8 +32,9 @@ var instanced_rooms = []
 enum MinimapColor { GREY, GREEN, RED, BLUE }
 
 # Reference to the GridContainer and ColorRect nodes
-onready var minimap_grid = $CanvasLayer/GridContainer
-var minimap_cells = []
+onready var minimap_grid = $CanvasLayer/MinimapUI/GridContainer
+onready var full_map_grid = $CanvasLayer/FullMapUI/GridContainer
+var full_map_visible = false
 
 # Function to generate a room based on constraints
 func generate_room(x: int, y: int) -> Array:
@@ -266,6 +267,81 @@ func update_minimap():
 				MinimapColor.BLUE:
 					cell.color = Color(0, 0, 1)  # Blue
 
+# Generate the full map
+func generate_full_map():
+	# Clear existing ColorRect nodes
+	for child in full_map_grid.get_children():
+		child.queue_free()
+	
+	# Set the GridContainer to fill the screen
+	full_map_grid.rect_min_size = Vector2(1920, 1080)
+	full_map_grid.anchor_right = 1.0
+	full_map_grid.anchor_bottom = 1.0
+	full_map_grid.margin_right = 0
+	full_map_grid.margin_bottom = 0
+	
+	# Calculate the size of each ColorRect
+	var cell_width = 1920 / grid_width -4 
+	var cell_height = 1080 / grid_height -4
+	
+	# Set the columns and rows for the GridContainer
+	full_map_grid.columns = grid_width
+	
+	# Create ColorRect nodes for each room
+	for y in range(grid_height):
+		for x in range(grid_width):
+			var color_rect = ColorRect.new()
+			color_rect.rect_min_size = Vector2(cell_width, cell_height)
+			full_map_grid.add_child(color_rect)
+	
+	# Update the full map colors
+	update_full_map()
+
+# Update the full map display
+func update_full_map():
+	for y in range(grid_height):
+		for x in range(grid_width):
+			var cell_index = y * grid_width + x
+			var cell = full_map_grid.get_child(cell_index)
+			
+			if x == player_x and y == player_y:
+				cell.color = Color(0, 0, 1)  # Blue (player's room)
+			elif enemy_grid[y][x]:
+				cell.color = Color(1, 0, 0)  # Red (room with enemies)
+			else:
+				cell.color = Color(0, 1, 0)  # Green (room without enemies)
+
+# Toggle the full map visibility
+func toggle_full_map():
+	full_map_visible = !full_map_visible
+	$CanvasLayer/FullMapUI.visible = full_map_visible
+	
+	if full_map_visible:
+		update_full_map()
+
+# Handle input for toggling the full map
+func _input(event):
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == BUTTON_LEFT:
+			# Check if the click is on the minimap
+			var minimap_rect = minimap_grid.get_global_rect()
+			#print("Minimap Rect: ", minimap_rect)
+			#print("Click Position: ", event.position)
+			
+			if minimap_rect.has_point(event.position):
+				#print("Clicked on minimap")
+				toggle_full_map()
+			
+			# Check if the click is anywhere on the screen while the full map is visible
+			elif full_map_visible:
+				#print("Clicked on full map (anywhere on screen)")
+				toggle_full_map()
+	
+	if event is InputEventKey and event.pressed:
+		if event.scancode == KEY_ESCAPE and full_map_visible:
+			#print("ESC key pressed")
+			toggle_full_map()
+
 # Main function to generate and build the dungeon
 func generate_dungeon():
 	randomize()  # Ensure randomness
@@ -278,6 +354,7 @@ func generate_dungeon():
 	
 	generate_enemy_grid()  # Generate the enemy grid
 	build_dungeon()
+	generate_full_map()  # Generate the full map
 	update_minimap()  # Initialize the minimap
 
 # Call the main function when the script runs
@@ -286,6 +363,11 @@ func _ready():
 	generate_dungeon()
 	yield(get_tree().create_timer(1), "timeout")
 	get_node("Camera2D").smoothing_enabled = true
+	print("Full Map Grid Size: ", full_map_grid.rect_size)
+	print("Full Map Grid Position: ", full_map_grid.rect_position)
+	for i in range(full_map_grid.get_child_count()):
+		var cell = full_map_grid.get_child(i)
+		print("Cell ", i, " Size: ", cell.rect_size, " Position: ", cell.rect_position)
 
 # Function to reset the dungeon
 func reset_dungeon():
