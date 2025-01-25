@@ -7,8 +7,8 @@ var directions = ["Up", "Down", "Left", "Right"]
 var opposite = {"Up": "Down", "Down": "Up", "Left": "Right", "Right": "Left"}
 
 # Grid dimensions (can be changed)
-var grid_width = 2  # Example: 2 columns
-var grid_height = 2 # Example: 2 rows
+var grid_width = 3  # Example: 2 columns
+var grid_height = 3 # Example: 2 rows
 
 # Player position in the grid
 var player_x: int
