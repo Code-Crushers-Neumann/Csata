@@ -19,7 +19,7 @@ var RightExcl = [allpos[6] , allpos[7]]
 func _ready():
 	pass
 
-func initiate(var _name,var _id, var spawning):
+func initiate(var _name,var _id, var spawning, var _enemy_types, var _min_enemy):
 	var szin = Color8((randi() % 156)+50,(randi() % 156)+50,(randi() % 156)+50)
 	if(spawning):
 		var directions = _name.split('_')
@@ -36,12 +36,13 @@ func initiate(var _name,var _id, var spawning):
 			for adat in RightExcl:
 				allpos.erase(adat)
 		var nodelocal = self.position
+		var min_enemy = clamp(_min_enemy,1,allpos.size()-1)
 		var voltman = []
-		for i in rand_range(1,allpos.size()-1):
+		for i in rand_range(min_enemy,allpos.size()-1):
 			var currentpos = choose(allpos)
 			if!(currentpos in voltman):
 				var spawn = nodelocal + allpos[i]
-				var newenemy_scene = load("res://scenes/enemy/enemy_"+choose(["1","2","3"])+".tscn")
+				var newenemy_scene = load("res://scenes/enemy/enemy_"+choose(_enemy_types)+".tscn")
 				var newenemy = newenemy_scene.instance()
 				newenemy.position = spawn
 				add_child(newenemy)
