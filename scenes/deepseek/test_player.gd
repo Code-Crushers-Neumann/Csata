@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+var velocitytoother = Vector2.ZERO
+
 var velocity := Vector2()
 var speed = 375
 var x = (180/PI)
@@ -20,7 +22,7 @@ func _ready():
 	update_health_bar()
 
 func _physics_process(delta):
-	move_and_slide(velocity*speed)
+	velocitytoother = move_and_slide(velocity*speed)
 
 
 var can_shoot = true

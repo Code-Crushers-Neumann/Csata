@@ -41,7 +41,7 @@ func initiate(var _name,var _id, var spawning):
 			var currentpos = choose(allpos)
 			if!(currentpos in voltman):
 				var spawn = nodelocal + allpos[i]
-				var newenemy_scene = load("res://scenes/enemy/enemy_1.tscn")
+				var newenemy_scene = load("res://scenes/enemy/enemy_"+choose(["1","2","3"])+".tscn")
 				var newenemy = newenemy_scene.instance()
 				newenemy.position = spawn
 				add_child(newenemy)

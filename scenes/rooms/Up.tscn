@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scenes/rooms/Room_Gen.gd" type="Script" id=1]
 
@@ -40,6 +40,18 @@ extents = Vector2( 34.75, 113 )
 
 [sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 960, 540.5 )
+
+[sub_resource type="RectangleShape2D" id=20]
+extents = Vector2( 163.5, 37.75 )
+
+[sub_resource type="RectangleShape2D" id=21]
+extents = Vector2( 117, 39.5 )
+
+[sub_resource type="RectangleShape2D" id=22]
+extents = Vector2( 36.5, 119.5 )
+
+[sub_resource type="RectangleShape2D" id=23]
+extents = Vector2( 34.75, 113 )
 
 [node name="Up" type="Node2D"]
 script = ExtResource( 1 )
@@ -119,5 +131,28 @@ shape = SubResource( 19 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 960, 540.5 )
 shape = SubResource( 7 )
+
+[node name="ToOpen2" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Down" type="CollisionShape2D" parent="ToOpen2"]
+position = Vector2( 958.5, 1042.25 )
+shape = SubResource( 20 )
+
+[node name="Up" type="CollisionShape2D" parent="ToOpen2"]
+position = Vector2( 959, 40.5 )
+shape = SubResource( 21 )
+
+[node name="Left" type="CollisionShape2D" parent="ToOpen2"]
+position = Vector2( 39.5, 540.5 )
+shape = SubResource( 22 )
+
+[node name="Right" type="CollisionShape2D" parent="ToOpen2"]
+position = Vector2( 1884.75, 539 )
+shape = SubResource( 23 )
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

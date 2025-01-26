@@ -24,7 +24,10 @@ func _physics_process(delta):
 		self.queue_free()
 
 func _on_Area2D_body_entered(body:Node):
-	if "enemy_1" in body.name:
+	if "enemy" in body.name:
+		body.die()
+		self.queue_free()
+	if "bullet" in body.name:
 		body.die()
 		self.queue_free()
 	if "WillStay" in body.name:
