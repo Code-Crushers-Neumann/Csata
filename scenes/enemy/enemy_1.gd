@@ -21,6 +21,7 @@ func die():
 	if(get_parent().enemies.empty()):
 		get_tree().get_root().get_child(15).enemy_grid[get_parent().id[0]][get_parent().id[1]] = false
 		if are_all_elements_false(get_tree().get_root().get_child(15).enemy_grid):
+			(EgoVenture.state as GameState).current_pont += get_parent().get_parent().grid_width*get_parent().get_parent().grid_height
 			if 1 == [1,2].pick_random() && get_parent().get_parent().enemy_types.size() != 0:
 				if 2 > get_parent().get_parent().enemy_types.count("2") && 2 > get_parent().get_parent().enemy_types.count("3"):
 					get_parent().get_parent().enemy_types.append(String([2,3].pick_random()))

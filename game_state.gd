@@ -7,4 +7,5 @@ extends BaseState
 # player's progress
 
 ## The player has taken the keys
-#export(bool) var has_keys = false
+export(int) var current_pont = 0
+export(int) var max_pont = 0

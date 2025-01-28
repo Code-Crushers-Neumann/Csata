@@ -183,12 +183,12 @@ margin_bottom = 622.0
 color = Color( 0.313726, 0.529412, 0.807843, 1 )
 
 [node name="Label" type="Label" parent="CanvasLayer/ColorRect"]
-margin_left = 295.0
-margin_top = 45.0
-margin_right = 782.0
-margin_bottom = 201.0
+margin_left = 238.0
+margin_top = 36.0
+margin_right = 843.0
+margin_bottom = 192.0
 custom_fonts/font = SubResource( 3 )
-text = "Level up"
+text = "Szintlépés"
 
 [node name="test_player" type="KinematicBody2D" parent="."]
 unique_name_in_owner = true

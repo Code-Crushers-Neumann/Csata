@@ -32,6 +32,12 @@ func _physics_process(delta):
 
 func _on_Area2D_body_entered(body:Node):
 	if "enemy" in body.name:
+		if "1" in body.name:
+			(EgoVenture.state as GameState).current_pont += 1
+		if "2" in body.name:
+			(EgoVenture.state as GameState).current_pont += 3
+		if "3" in body.name:
+			(EgoVenture.state as GameState).current_pont += 5
 		body.die()
 		self.queue_free()
 	if "bullet" in body.name:

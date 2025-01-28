@@ -79,6 +79,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/egoventure/resources/goal.gd"
 }, {
+"base": "Resource",
+"class": "HighScoreResource",
+"language": "GDScript",
+"path": "res://addons/HighScoreResource.gd"
+}, {
 "base": "TextureButton",
 "class": "Hotspot",
 "language": "GDScript",
@@ -149,6 +154,7 @@ _global_script_class_icons={
 "GameConfiguration": "",
 "GameState": "",
 "Goal": "",
+"HighScoreResource": "",
 "Hotspot": "res://addons/egoventure/images/hotspot.svg",
 "Importer": "",
 "InGameConfiguration": "",
