@@ -361,9 +361,16 @@ func generate_dungeon():
 	generate_full_map()  # Generate the full map
 	update_minimap()  # Initialize the minimap
 
+func sajt():
+	EgoVenture.change_scene("res://scenes/deepseek/build.tscn")
 # Call the main function when the script runs
 func _ready():
 	Inventory.disable()
+	get_node("/root/MainMenu/Menu/MainMenu/Margin/VBox/MenuItems/NewGame").hide()
+	EgoVenture.game_started = true
+	Boombox.play_music(load("res://music/eerie-echoes-of-the-abyss-252094.mp3"))
+	#EgoVenture.save_continue()
+	MainMenu.saveable = false
 	generate_dungeon()
 	yield(get_tree().create_timer(1), "timeout")
 	get_node("Camera2D").smoothing_enabled = true
@@ -376,3 +383,21 @@ func _ready():
 # Function to reset the dungeon
 func reset_dungeon():
 	generate_dungeon()
+	get_node("CanvasLayer/ColorRect").visible = true
+	Boombox.play_effect(load("res://sounds/level-up-289723.mp3"))
+	yield(get_tree().create_timer(1),"timeout")
+	get_node("CanvasLayer/ColorRect").visible = false
+
+
+func _on_Hotspot_activate():
+	MainMenu.toggle()
+
+var gameover = false
+func _process(delta):
+	if !Boombox.is_music_playing() && Boombox.get_music() != load("res://music/a-black-dawn-music-box-167993.mp3"):
+		gameover = true
+		yield(Boombox,"effect_finished")
+		if gameover && Boombox.get_music() != load("res://music/a-black-dawn-music-box-167993.mp3"):
+			gameover = false
+			Boombox.play_music(load("res://music/a-black-dawn-music-box-167993.mp3"))
+			EgoVenture.change_scene("res://scenes/deepseek/gameover.tscn")

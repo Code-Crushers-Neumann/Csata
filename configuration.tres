@@ -1,6 +1,8 @@
-[gd_resource type="Resource" load_steps=22 format=2]
+[gd_resource type="Resource" load_steps=24 format=2]
 
 [ext_resource path="res://addons/egoventure/resources/game_configuration.gd" type="Script" id=1]
+[ext_resource path="res://music/dark-intentions-288498.mp3" type="AudioStream" id=2]
+[ext_resource path="res://sounds/tank-track-ratteling-197409.mp3" type="AudioStream" id=3]
 [ext_resource path="res://theme.tres" type="Theme" id=5]
 [ext_resource path="res://addons/egoventure/resources/cursor.gd" type="Script" id=15]
 
@@ -96,14 +98,16 @@ data = PoolByteArray( 79, 103, 103, 83, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 228, 113, 
 script = ExtResource( 1 )
 design_theme = ExtResource( 5 )
 design_cursors = [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ) ]
+menu_music = ExtResource( 2 )
 menu_switch_effect = SubResource( 18 )
 menu_item_separation = 30
-menu_quit_confirmation = "Do you really want to quit the game?"
+menu_quit_confirmation = "Biztos ki akarsz lépni?"
 menu_overwrite_confirmation = "Are you sure you want to overwrite a saved game?"
-menu_restart_confirmation = "You will lose all progress when starting a new game. Do you really want to restart?"
+menu_restart_confirmation = "Elveszíted ezt a mentést, ha új játékot akarsz. Biztos?"
 menu_saveslots_empty_color = Color( 0, 0, 0, 0.55 )
 menu_saveslots_free_text = "Free save slot"
 inventory_size = 113
+menu_options_effects_sample = ExtResource( 3 )
 menu_options_locale_button_modulate = Color( 1, 1, 1, 0.2 )
 menu_options_locale_button_modulate_selected = Color( 1, 1, 1, 1 )
 menu_options_hide_language_selection = false

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/eerie-echoes-of-the-abyss-252094.mp3-47361f66d3fd873aa79267e44b04fa25.mp3str"
+
+[deps]
+
+source_file="res://music/eerie-echoes-of-the-abyss-252094.mp3"
+dest_files=[ "res://.import/eerie-echoes-of-the-abyss-252094.mp3-47361f66d3fd873aa79267e44b04fa25.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

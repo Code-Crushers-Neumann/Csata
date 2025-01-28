@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/elemental-magic-spell-impact-outgoing-2283421.mp3-f21eecaa3f7a739678a476cb4e845cd9.mp3str"
+
+[deps]
+
+source_file="res://sounds/elemental-magic-spell-impact-outgoing-2283421.mp3"
+dest_files=[ "res://.import/elemental-magic-spell-impact-outgoing-2283421.mp3-f21eecaa3f7a739678a476cb4e845cd9.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -8,6 +8,7 @@ var x = (180/PI)
 var last = 0
 var last2 = 0
 
+
 var can_take_damage = true
 
 # Declare member variables here. Examples:
@@ -22,22 +23,37 @@ func _ready():
 	update_health_bar()
 
 func _physics_process(delta):
-	velocitytoother = move_and_slide(velocity*speed)
+	velocitytoother = move_and_slide(velocity*speed) 
+	if velocitytoother.length() > 0:
+		if not Boombox.is_background_playing():
+			Boombox.play_background(load("res://sounds/tank-track-ratteling-197409.mp3"))
+	else:
+		Boombox.stop_background()
 
+var can_shoot = false
 
-var can_shoot = true
+var forog = false
+var jatszae = false
+var move2
+var can_shoot2 = true
+
 
 func _on_VirtualJoystick2_analogic_chage(move):
+	move2 = move
+	forog = true
 	get_node("Gun").rotation_degrees = move.angle() * x
 	if abs(move.angle() * x) == 0:
 		get_node("Gun").rotation_degrees = last2
 	last2 = move.angle() * x
+	if !can_shoot:
+		can_shoot = true
 
-	if can_shoot:
-		shoot_bullet(move)
-		can_shoot = false
-		$ShootCooldownTimer.start()
-
+	
+	if forog && !jatszae:
+		jatszae = true
+		Boombox.play_effect(load("res://sounds/tank-turret-rotate-14879.mp3"))
+		yield(Boombox,"effect_finished")
+		jatszae = false
 func shoot_bullet(move):
 	var bullet_scene = load("res://scenes/bullets/bullet_player.tscn")
 	var bullet = bullet_scene.instance()
@@ -47,13 +63,20 @@ func shoot_bullet(move):
 	get_parent().add_child(bullet)
 
 func _on_ShootCooldownTimer_timeout():
-	can_shoot = true
+	can_shoot2 = true
 
+func _process(delta):
+	if forog && can_shoot2:
+		shoot_bullet(move2)
+		can_shoot = false
+		can_shoot2 = false
+		$ShootCooldownTimer.start()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
+func _on_VirtualJoystick2_analogic_released():
+	forog = false
+	can_shoot = false
+	jatszae = false
+	Boombox.stop_effect()  # Stop the sound effect when the joystick is released
 
 
 func _on_VirtualJoystick_analogic_chage(move):
@@ -102,10 +125,19 @@ func set_health(new_health: int):
 	health = clamp(new_health, 0, 6)  # Ensure health stays between 0 and 9
 	update_health_bar()
 	if health == 0:
+		Boombox.stop_background()
+		Boombox.stop_music()
+		Boombox.stop_effect()
+		Boombox.play_effect(load("res://sounds/metal-pipe-230698.mp3"))
 		self.queue_free()
+		
+
 	self.modulate = Color8(255,100,100,255)
 
 
 func _on_DamageCooldownTimer_timeout():
 	can_take_damage = true
 	self.modulate = Color8(255,255,255,255)
+
+
+

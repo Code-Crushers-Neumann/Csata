@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/deepseek/build.gd" type="Script" id=1]
 [ext_resource path="res://addons/virtual_joystick/sprites/joystick.png" type="Texture" id=2]
@@ -8,6 +8,13 @@
 [ext_resource path="res://scenes/deepseek/test_player.gd" type="Script" id=6]
 [ext_resource path="res://images/player/loveg_2.png" type="Texture" id=7]
 [ext_resource path="res://images/player/player_2.png" type="Texture" id=8]
+[ext_resource path="res://addons/egoventure/nodes/hotspots/hotspot.gd" type="Script" id=9]
+[ext_resource path="res://images/misc/menu_icon.png" type="Texture" id=10]
+[ext_resource path="res://misc/fonts/Roboto-Regular.ttf" type="DynamicFontData" id=11]
+
+[sub_resource type="DynamicFont" id=3]
+size = 132
+font_data = ExtResource( 11 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 70.5938, 72.9063 )
@@ -151,6 +158,38 @@ margin_bottom = 1040.0
 rect_min_size = Vector2( 1920, 1080 )
 rect_clip_content = true
 
+[node name="Hotspot" type="TextureButton" parent="CanvasLayer"]
+margin_left = 907.0
+margin_top = 32.0
+margin_right = 1014.0
+margin_bottom = 143.0
+mouse_default_cursor_shape = 7
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+cursor_type = 13
+
+[node name="Sprite2" type="Sprite" parent="CanvasLayer/Hotspot"]
+texture = ExtResource( 10 )
+centered = false
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
+margin_left = 424.0
+margin_top = 376.0
+margin_right = 1498.0
+margin_bottom = 622.0
+color = Color( 0.313726, 0.529412, 0.807843, 1 )
+
+[node name="Label" type="Label" parent="CanvasLayer/ColorRect"]
+margin_left = 295.0
+margin_top = 45.0
+margin_right = 782.0
+margin_bottom = 201.0
+custom_fonts/font = SubResource( 3 )
+text = "Level up"
+
 [node name="test_player" type="KinematicBody2D" parent="."]
 unique_name_in_owner = true
 position = Vector2( -286, -222 )
@@ -172,7 +211,8 @@ frames = SubResource( 2 )
 [node name="Gun" type="Sprite" parent="test_player"]
 position = Vector2( -0.999985, -59 )
 scale = Vector2( 0.75, 0.75 )
-z_index = 6
+z_index = 20
+z_as_relative = false
 texture = ExtResource( 7 )
 offset = Vector2( 46, 0 )
 
@@ -183,5 +223,7 @@ wait_time = 0.9
 
 [connection signal="analogic_chage" from="CanvasLayer/VirtualJoystick" to="test_player" method="_on_VirtualJoystick_analogic_chage"]
 [connection signal="analogic_chage" from="CanvasLayer/VirtualJoystick2" to="test_player" method="_on_VirtualJoystick2_analogic_chage"]
+[connection signal="analogic_released" from="CanvasLayer/VirtualJoystick2" to="test_player" method="_on_VirtualJoystick2_analogic_released"]
+[connection signal="activate" from="CanvasLayer/Hotspot" to="." method="_on_Hotspot_activate"]
 [connection signal="timeout" from="test_player/ShootCooldownTimer" to="test_player" method="_on_ShootCooldownTimer_timeout"]
 [connection signal="timeout" from="test_player/DamageCooldownTimer" to="test_player" method="_on_DamageCooldownTimer_timeout"]

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/053893_tank-shots-86181.mp3-53f9d749a38d9527ec792d9c4bdee0d9.mp3str"
+
+[deps]
+
+source_file="res://sounds/053893_tank-shots-86181.mp3"
+dest_files=[ "res://.import/053893_tank-shots-86181.mp3-53f9d749a38d9527ec792d9c4bdee0d9.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

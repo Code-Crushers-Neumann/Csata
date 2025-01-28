@@ -4,11 +4,15 @@ export var speed: float = 300.0
 var direction: Vector2 = Vector2.ZERO  # Declare the direction variable
 onready var player = get_tree().get_root().get_child(15).get_node("test_player")
 
+var hangzott = false
+
 func _physics_process(delta):
     if direction != Vector2.ZERO:
         move_and_slide(direction * speed)
         self.rotation_degrees = direction.angle() * (180/PI)
-
+        if !hangzott:
+            hangzott = true
+            get_node("Boombox").play_effect(load("res://sounds/elemental-magic-spell-impact-outgoing-228342"+["1","2","3"].pick_random()+".mp3"))
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -17,7 +21,7 @@ func _physics_process(delta):
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	add_child(load("res://addons/egoventure/nodes/boombox.tscn").instance())
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

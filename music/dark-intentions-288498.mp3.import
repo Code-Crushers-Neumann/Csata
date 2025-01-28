@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/dark-intentions-288498.mp3-9490f812c246bfc30f9772503e6eb70a.mp3str"
+
+[deps]
+
+source_file="res://music/dark-intentions-288498.mp3"
+dest_files=[ "res://.import/dark-intentions-288498.mp3-9490f812c246bfc30f9772503e6eb70a.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

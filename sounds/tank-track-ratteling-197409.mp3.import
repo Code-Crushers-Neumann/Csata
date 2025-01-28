@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/tank-track-ratteling-197409.mp3-8bbece92cca7a81f9a45009f1d8ed5f5.mp3str"
+
+[deps]
+
+source_file="res://sounds/tank-track-ratteling-197409.mp3"
+dest_files=[ "res://.import/tank-track-ratteling-197409.mp3-8bbece92cca7a81f9a45009f1d8ed5f5.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

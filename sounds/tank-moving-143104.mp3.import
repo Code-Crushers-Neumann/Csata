@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/tank-moving-143104.mp3-2cc7edc2ef672e20dcac4813810567ce.mp3str"
+
+[deps]
+
+source_file="res://sounds/tank-moving-143104.mp3"
+dest_files=[ "res://.import/tank-moving-143104.mp3-2cc7edc2ef672e20dcac4813810567ce.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

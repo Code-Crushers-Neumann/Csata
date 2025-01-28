@@ -1,6 +1,7 @@
 extends Control
 
 func _ready():
+	Inventory.disable()
 	MainMenu.disabled = true
 
 func to_menu():

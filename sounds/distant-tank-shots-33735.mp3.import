@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/distant-tank-shots-33735.mp3-c111ce83b6393180ac136bd827560d82.mp3str"
+
+[deps]
+
+source_file="res://sounds/distant-tank-shots-33735.mp3"
+dest_files=[ "res://.import/distant-tank-shots-33735.mp3-c111ce83b6393180ac136bd827560d82.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

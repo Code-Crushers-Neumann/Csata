@@ -20,7 +20,7 @@ func _ready():
 	pass
 
 func initiate(var _name,var _id, var spawning, var _enemy_types, var _min_enemy):
-	var szin = Color8((randi() % 156)+50,(randi() % 156)+50,(randi() % 156)+50)
+	var szin = Color8((randi() % 106)+100,(randi() % 106)+100,(randi() % 106)+100)
 	if(spawning):
 		var directions = _name.split('_')
 		if directions.has("Up"):

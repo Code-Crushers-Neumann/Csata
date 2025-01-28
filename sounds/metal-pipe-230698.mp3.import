@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/metal-pipe-230698.mp3-3959146f4f55894ff3204926093535ab.mp3str"
+
+[deps]
+
+source_file="res://sounds/metal-pipe-230698.mp3"
+dest_files=[ "res://.import/metal-pipe-230698.mp3-3959146f4f55894ff3204926093535ab.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

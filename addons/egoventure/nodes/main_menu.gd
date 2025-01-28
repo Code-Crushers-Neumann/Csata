@@ -182,7 +182,7 @@ func toggle():
 			$Menu/MainMenu/Margin/VBox/MenuItems/Resume.show()
 			$Menu/MainMenu/Margin/VBox/MenuItems/Continue.hide()
 		else:
-			$Menu/MainMenu/Margin/VBox/MenuItems/Continue.show()
+			#$Menu/MainMenu/Margin/VBox/MenuItems/Continue.show()
 			$Menu/MainMenu/Margin/VBox/MenuItems/Resume.hide()
 			
 			if EgoVenture.has_continue_state():
@@ -227,7 +227,7 @@ func toggle():
 				EgoVenture.in_game_configuration.fullscreen
 			Speedy.set_shape(Input.CURSOR_ARROW)
 			if EgoVenture.is_touch:
-				$Menu/MainMenu/Margin/VBox/MenuItems/Quit.hide()
+				#$Menu/MainMenu/Margin/VBox/MenuItems/Quit.hide()
 				$Menu/Options/CenterContainer/VBox/Grid/Fullscreen.hide()
 				$Menu/Options/CenterContainer/VBox/Grid/FullscreenLabel.hide()
 

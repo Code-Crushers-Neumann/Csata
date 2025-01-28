@@ -113,8 +113,8 @@ __meta__ = {
 [node name="VBox" type="VBoxContainer" parent="Menu/MainMenu/Margin"]
 margin_left = 200.0
 margin_top = 50.0
-margin_right = 2360.0
-margin_bottom = 1390.0
+margin_right = 1720.0
+margin_bottom = 1030.0
 size_flags_vertical = 3
 custom_constants/separation = 50
 __meta__ = {
@@ -140,6 +140,7 @@ size_flags_stretch_ratio = 3.0
 custom_constants/separation = 30
 
 [node name="Continue" type="Button" parent="Menu/MainMenu/Margin/VBox/MenuItems"]
+visible = false
 margin_right = 2160.0
 margin_bottom = 71.0
 size_flags_horizontal = 3
@@ -165,7 +166,7 @@ custom_styles/pressed = SubResource( 21 )
 custom_styles/focus = SubResource( 23 )
 custom_styles/disabled = SubResource( 21 )
 custom_styles/normal = SubResource( 21 )
-text = "MENU_RESUME"
+text = "Folytatás"
 script = ExtResource( 3 )
 
 [node name="NewGame" type="Button" parent="Menu/MainMenu/Margin/VBox/MenuItems"]
@@ -180,10 +181,11 @@ custom_styles/pressed = SubResource( 21 )
 custom_styles/focus = SubResource( 24 )
 custom_styles/disabled = SubResource( 21 )
 custom_styles/normal = SubResource( 21 )
-text = "MENU_NEW"
+text = "Új játék"
 script = ExtResource( 3 )
 
 [node name="Load" type="Button" parent="Menu/MainMenu/Margin/VBox/MenuItems"]
+visible = false
 margin_top = 303.0
 margin_right = 2160.0
 margin_bottom = 374.0
@@ -199,6 +201,7 @@ text = "MENU_LOAD"
 script = ExtResource( 3 )
 
 [node name="Save" type="Button" parent="Menu/MainMenu/Margin/VBox/MenuItems"]
+visible = false
 margin_top = 404.0
 margin_right = 2160.0
 margin_bottom = 475.0
@@ -225,7 +228,7 @@ custom_styles/pressed = SubResource( 21 )
 custom_styles/focus = SubResource( 27 )
 custom_styles/disabled = SubResource( 21 )
 custom_styles/normal = SubResource( 21 )
-text = "MENU_OPTIONS"
+text = "Beállítások"
 script = ExtResource( 3 )
 
 [node name="Quit" type="Button" parent="Menu/MainMenu/Margin/VBox/MenuItems"]
@@ -240,7 +243,7 @@ custom_styles/pressed = SubResource( 21 )
 custom_styles/focus = SubResource( 28 )
 custom_styles/disabled = SubResource( 21 )
 custom_styles/normal = SubResource( 21 )
-text = "MENU_QUIT"
+text = "Kilépés"
 script = ExtResource( 3 )
 
 [node name="Spacer" type="Control" parent="Menu/MainMenu/Margin/VBox"]
@@ -867,10 +870,10 @@ __meta__ = {
 }
 
 [node name="VBox" type="VBoxContainer" parent="Menu/Options/CenterContainer"]
-margin_left = 765.0
-margin_top = 549.0
-margin_right = 1795.0
-margin_bottom = 891.0
+margin_left = 620.0
+margin_top = 476.0
+margin_right = 1300.0
+margin_bottom = 604.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -883,6 +886,7 @@ custom_constants/hseparation = 30
 columns = 2
 
 [node name="LocaleLabel" type="Label" parent="Menu/Options/CenterContainer/VBox/Grid"]
+visible = false
 margin_right = 500.0
 margin_bottom = 14.0
 rect_min_size = Vector2( 500, 0 )
@@ -890,6 +894,7 @@ text = "OPTIONS_LOCALE"
 align = 2
 
 [node name="Locales" type="HBoxContainer" parent="Menu/Options/CenterContainer/VBox/Grid"]
+visible = false
 margin_left = 530.0
 margin_right = 1030.0
 margin_bottom = 14.0
@@ -900,6 +905,7 @@ __meta__ = {
 }
 
 [node name="SpeechLabel" type="Label" parent="Menu/Options/CenterContainer/VBox/Grid"]
+visible = false
 margin_top = 44.0
 margin_right = 500.0
 margin_bottom = 60.0
@@ -910,6 +916,7 @@ align = 2
 valign = 2
 
 [node name="SpeechSlider" type="HSlider" parent="Menu/Options/CenterContainer/VBox/Grid"]
+visible = false
 margin_left = 530.0
 margin_top = 44.0
 margin_right = 1030.0
@@ -929,7 +936,7 @@ margin_right = 500.0
 margin_bottom = 106.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "OPTIONS_MUSIC"
+text = "Zene hangereje"
 align = 2
 valign = 2
 
@@ -949,7 +956,7 @@ margin_right = 500.0
 margin_bottom = 152.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "OPTIONS_EFFECTS"
+text = "Hangeffektek hangereje"
 align = 2
 valign = 2
 
@@ -964,6 +971,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 1
 
 [node name="SubtitlesLabel" type="Label" parent="Menu/Options/CenterContainer/VBox/Grid"]
+visible = false
 margin_top = 182.0
 margin_right = 500.0
 margin_bottom = 214.0
@@ -973,6 +981,7 @@ align = 2
 valign = 2
 
 [node name="Subtitles" type="CheckButton" parent="Menu/Options/CenterContainer/VBox/Grid"]
+visible = false
 margin_left = 530.0
 margin_top = 182.0
 margin_right = 594.0
@@ -983,6 +992,7 @@ size_flags_vertical = 0
 custom_styles/normal = SubResource( 15 )
 
 [node name="FullscreenLabel" type="Label" parent="Menu/Options/CenterContainer/VBox/Grid"]
+visible = false
 margin_top = 244.0
 margin_right = 500.0
 margin_bottom = 276.0
@@ -995,6 +1005,7 @@ __meta__ = {
 }
 
 [node name="Fullscreen" type="CheckButton" parent="Menu/Options/CenterContainer/VBox/Grid"]
+visible = false
 margin_left = 530.0
 margin_top = 244.0
 margin_right = 594.0
@@ -1020,7 +1031,7 @@ custom_styles/pressed = SubResource( 21 )
 custom_styles/focus = SubResource( 30 )
 custom_styles/disabled = SubResource( 21 )
 custom_styles/normal = SubResource( 21 )
-text = "OPTIONS_RETURN"
+text = "Vissza"
 script = ExtResource( 3 )
 
 [node name="QuitConfirm" type="ConfirmationDialog" parent="Menu"]

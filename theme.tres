@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=29 format=2]
+[gd_resource type="Theme" load_steps=28 format=2]
 
 [ext_resource path="res://misc/fonts/Roboto-Regular.ttf" type="DynamicFontData" id=1]
 
@@ -36,14 +36,16 @@ content_margin_right = 10.0
 content_margin_top = 10.0
 content_margin_bottom = 10.0
 
-[sub_resource type="ImageTexture" id=9]
+[sub_resource type="StyleBoxEmpty" id=28]
 
-[sub_resource type="StyleBoxEmpty" id=10]
+[sub_resource type="StyleBoxFlat" id=29]
+border_width_top = 50
+border_color = Color( 1, 0.0126582, 0.0126582, 1 )
 
-[sub_resource type="StyleBoxEmpty" id=11]
-
-[sub_resource type="StyleBoxTexture" id=12]
-region_rect = Rect2( 0, 0, 485, 69 )
+[sub_resource type="StyleBoxFlat" id=30]
+bg_color = Color( 0.658824, 0.207843, 0.207843, 1 )
+border_width_top = 50
+border_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="DynamicFont" id=13]
 size = 48
@@ -145,8 +147,8 @@ bg_color = Color( 0.156863, 0.00784314, 0.00784314, 1 )
 default_font = SubResource( 27 )
 Button/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 1 )
 Button/colors/font_color_disabled = Color( 0.392157, 0.415686, 0.423529, 1 )
-Button/colors/font_color_hover = Color( 0.694118, 0.501961, 0.435294, 1 )
-Button/colors/font_color_pressed = Color( 0.694118, 0.501961, 0.435294, 1 )
+Button/colors/font_color_hover = Color( 1, 1, 1, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
 Button/fonts/menu_button = SubResource( 1 )
 Button/fonts/menu_button_hover = SubResource( 2 )
 Button/styles/focus = SubResource( 3 )
@@ -166,12 +168,11 @@ CheckButton/styles/normal = SubResource( 8 )
 CheckButton/styles/pressed = SubResource( 8 )
 HSlider/icons/grabber = null
 HSlider/icons/grabber_highlight = null
-HSlider/icons/tick = SubResource( 9 )
-HSlider/styles/grabber_area = SubResource( 10 )
-HSlider/styles/grabber_area_highlight = SubResource( 11 )
-HSlider/styles/slider = SubResource( 12 )
+HSlider/styles/grabber_area = SubResource( 28 )
+HSlider/styles/grabber_area_highlight = SubResource( 29 )
+HSlider/styles/slider = SubResource( 30 )
 Label/colors/detail_view_font_color = Color( 0, 0, 0, 1 )
-Label/colors/font_color = Color( 0, 0, 0, 1 )
+Label/colors/font_color = Color( 1, 1, 1, 1 )
 Label/colors/goals = Color( 0, 0, 0, 1 )
 Label/colors/hints = Color( 0, 0, 0, 1 )
 Label/fonts/detail_view = SubResource( 13 )
@@ -191,6 +192,7 @@ RichTextLabel/colors/dialog_hotspot_hover_font_color = Color( 0.133333, 0.470588
 RichTextLabel/fonts/dialog_font = SubResource( 24 )
 RichTextLabel/fonts/dialog_hotspot_bold_font = SubResource( 27 )
 RichTextLabel/fonts/dialog_hotspot_normal_font = SubResource( 25 )
+WindowDialog/colors/title_color = Color( 1, 1, 1, 1 )
 WindowDialog/icons/close = null
 WindowDialog/icons/close_highlight = null
 WindowDialog/styles/panel = SubResource( 26 )

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/cannon-shot-14799.mp3-47835c7c87bb160f1a0168e38284793f.mp3str"
+
+[deps]
+
+source_file="res://sounds/cannon-shot-14799.mp3"
+dest_files=[ "res://.import/cannon-shot-14799.mp3-47835c7c87bb160f1a0168e38284793f.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

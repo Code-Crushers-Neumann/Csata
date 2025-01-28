@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/a-black-dawn-music-box-167993.mp3-cf06f2fcae5994c5dd11208980865ddb.mp3str"
+
+[deps]
+
+source_file="res://music/a-black-dawn-music-box-167993.mp3"
+dest_files=[ "res://.import/a-black-dawn-music-box-167993.mp3-cf06f2fcae5994c5dd11208980865ddb.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
